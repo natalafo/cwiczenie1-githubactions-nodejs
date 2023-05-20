@@ -1,7 +1,7 @@
 name: Main
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   workflow_dispatch:
 jobs:
   build:
@@ -16,26 +16,24 @@ jobs:
 
     - name: Install dependencies
       run: npm install
-#    - name: Run test
-#      run: npm test
-    
+#     - name: Run test
+#       run: npm test
+      
   deploy:
-    runs-on: ubuntu-latest
-    needs: [build]
-    steps:
-    - name: check-out
-      uses: action/checkout@v2
-    - name: app service
-      uses: azure/appservice-build@v3
-      with:
-          platform: nodejs
-          platform-version: 14.21.3
-          source-directory: sampleApps/node/webfronted
-          output-directory: <OUTPUT_DIR>
-    - name: Deploying web app to Azure
-      uses: azure/webapps-deploy@v1
-      with:
-          app-name: cw3apka
-          publish-profile: ${{ secrets.AZURE_WEB_APP_PUBLISH_PROFILE }}
-    
-
+      runs-on: ubuntu-latest
+      needs: [build]
+      steps: 
+        - name: check-out
+          uses: actions/checkout@v2
+        - name: app service
+          uses: azure/appservice-build@v3
+          with:
+            platform: nodejs
+            platform-version: 14.21.3
+#             source-directory: <SOURCE_DIR>
+#             output-directory: <OUTPUT_DIR>    
+        - name: Deploying web app to Azure
+          uses: azure/webapps-deploy@v1
+          with:
+            app-name: cw3apka
+            publish-profile: ${{ secrets.AZURE_WEB_APP_PUBLISH_PROFILE }}
